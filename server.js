@@ -19,8 +19,8 @@ app.set('views', './views');
 app.set('view engine', 'pug');
 
 app.route('/').get((req, res) => {
-  res.render('test.pug', {message: 'testing', formula: 'asdv12'});
-//  res.sendFile(process.cwd() + '/index.html');
+  res.render('test.pug');//, { message: 'testing', formula: 'asdv12' });
+  //  res.sendFile(process.cwd() + '/index.html');
 });
 
 app.route('/createFormula').post((req, res) => {
@@ -35,11 +35,12 @@ app.route('/createFormula').post((req, res) => {
 app.route('/editFormula').post((req, res) => {
   const { formula } = req.body;
 
-  formulaModel.findOne({ formula }, (err, formulaFound) => {
+  formulaModel.findOne({ formula: formula }, (err, formulaFound) => {
     if (err) return console.error(err);
     console.log(formulaFound);
+    res.render('test.pug', { formula: formulaFound.formula });
   });
-  res.redirect('/');
+
 });
 
 app.route('/show').post((req, res) => {
