@@ -10,7 +10,8 @@ mongoose.connect(process.env.MONGO_URI);
 const formulaSchema = new mongoose.Schema({
   username: String,
   formula: String,
-  code: Number
+  code: Number,
+  productLine: String
 });
 
 const formulaModel = mongoose.model('formula', formulaSchema);
@@ -24,8 +25,8 @@ app.route('/').get((req, res) => {
 });
 
 app.route('/createFormula').post((req, res) => {
-  const { formula } = req.body;
-  formulaModel.create({ formula: formula }, (err, formulaAdded) => {
+  const { formula, code, productLine } = req.body;
+  formulaModel.create({ formula: formula, code: code, productLine: productLine}, (err, formulaAdded) => {
     if (err) return console.error(err);
     console.log(formulaAdded);
   });
@@ -33,13 +34,47 @@ app.route('/createFormula').post((req, res) => {
 });
 
 app.route('/editFormula').post((req, res) => {
-  const { formula } = req.body;
+  const { formula, code, productLine, search, save } = req.body;
+  console.log(!!search)
 
-  formulaModel.findOne({ formula: formula }, (err, formulaFound) => {
-    if (err) return console.error(err);
-    console.log(formulaFound);
-    res.render('test.pug', { formula: formulaFound.formula });
-  });
+  if (!!search) {
+    formulaModel.findOne({formula: formula}, (err, formulaFound) => {
+      if (err) return console.error(err);
+
+      console.log(formulaFound, req.body);
+
+      res.render('test.pug', {
+        showInput: true,
+        formula: formulaFound.formula,
+        code: formulaFound.code,
+        productLine: formulaFound.productLine
+      });
+    })
+  } else if (!!save) {
+    formulaModel.findOneAndUpdate(
+      { formula: formula },
+      {
+        formula: formula,
+        code: code,
+        productLine: productLine
+      },
+      {
+        new: true,
+        overwrite: false
+      },
+      (err, formulaFound) => {
+        if (err) return console.error(err);
+
+        console.log(formulaFound, req.body);
+
+        res.render('test.pug', {
+          showInput: true,
+          formula: formulaFound.formula,
+          code: formulaFound.code,
+          productLine: formulaFound.productLine
+        });
+    });
+  }
 
 });
 

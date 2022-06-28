@@ -4,13 +4,18 @@ html
       h1 create new formula
       input(type='text' name='formula' placeholder='formula')
       input(type='text' name='code' placeholder='code')
+      input(type='text' name='productLine' placeholder='product line')
       input(type='submit' value='save')
 
     form(action='/editFormula' method='post')
       h1 edit formula
       input(type='text' name='formula' placeholder='formula' value=formula)
-      input(type='text' name='code' placeholder='code')
-      input(type='submit' value='search')
+      if showInput
+        input(type='text' name='code' placeholder='code' value=code)
+        input(type='text' name='productLine' placeholder='product line' value=productLine)
+        input(type='submit' value='save' name='save')
+      input(type='submit' value='search' name='search')
+
 
     form(action='/show' method='post')
       input(type='submit' value='show')
