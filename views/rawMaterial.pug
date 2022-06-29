@@ -1,0 +1,34 @@
+html
+  head
+    style
+      include ../style.css
+
+  body
+    form(action='/rawMaterial' method='post')
+      h1 create raw material
+      input(type='text' name='name' placeholder='name')
+      input(type='number' name='code' placeholder='code')
+      input(type='number' name='cost' placeholder='cost')
+
+      div#createRawMaterial
+        label(for='normal') normal
+        input(id='normal'  type='radio' name='type'  value='normal')
+        label(for='freight') freight
+        input(id='freight' type='radio' name='type'  value='freight')
+
+      div#createRawMaterial
+        label(for='kg') kg
+        input(id='kg'  type='radio' name='unit'  value='kg')
+        label(for='t') t
+        input(id='t' type='radio' name='unit'  value='t')
+      
+      input(type='submit' value='create')
+
+    form
+      h1 edit raw material
+      input(type='' name='' placeholder='')
+      input(type='' name='' placeholder='')
+      input(type='' name='' placeholder='')
+      input(type='' name='' placeholder='')
+      input(type='submit')
+      
