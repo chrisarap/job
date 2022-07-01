@@ -20,7 +20,13 @@ const rawMaterialSchema = new mongoose.Schema({
   currency: String
 });
 
+const userSchema = new mongoose.Schema({
+  username: String,
+  password: String
+});
+
 module.exports = {
   formulaSchema,
-  rawMaterialSchema
+  rawMaterialSchema,
+  userSchema
 };

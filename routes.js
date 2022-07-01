@@ -1,14 +1,45 @@
-module.exports = (app, formulaModel, rawMaterialModel) => {
+module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
   /****************************** 
     index 
   *******************************/
   app.route('/')
-    .get((req, res) => res.render('index'))
+    .get((req, res) => res.render('login'))
     .post((req, res) => {
       const { rawMaterialBtn, formulasBtn } = req.body;
       if (!!rawMaterialBtn) res.render('rawMaterial');
       if (!!formulasBtn) res.render('formulas');
     });
+
+  /****************************** 
+    login
+  *******************************/
+  app.route('/login').post((req, res) => {
+    const { loginBtn, signupBtn } = req.body;
+    if (!!loginBtn) {
+
+    }
+    if (!!signupBtn) res.render('signup');
+  });
+
+  /****************************** 
+    sign up 
+  *******************************/
+
+  app.route('/signup').post((req, res) => {
+    const { username, password, password2 } = req.body;
+
+    userModel.findOne({ username: username }, (err, foundUser) => {
+      if (err) return console.error(err);
+      if (foundUser) res.render('signup', { message: 'the username exist!' });
+      if (password !== password2) res.render('signup', { message: 'passwords are different' });
+      if (!foundUser && password === password2) {
+        userModel.create({ username, password }, (err, userCreated) => {
+          if (err) return console.err(err);
+          res.render('login');
+        });
+      }
+    })
+  });
 
   /****************************** 
     raw material 
