@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap');
+
+body{
+  font-family: Ubuntu;
+}
+
 form {
   border: solid;
   border-radius: 10px;
@@ -9,4 +15,17 @@ form {
   flex-direction: column;
   justify-content: flex-start;
   align-items: start;
+}
+
+a {
+  background: green;
+  border-radius: 5px;
+  text-decoration:none;
+  color: white;
+  padding: 10px;
+  margin: 10px;
+}
+
+a:hover{
+  background: darkgreen;
 }

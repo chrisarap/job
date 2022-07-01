@@ -18,13 +18,15 @@ module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
     login
   *******************************/
   app.route('/login').post(passport.authenticate('local', {
-    failureRedirect: '/login'
+    failureRedirect: '/'
   }), (req, res) => {
     const { loginBtn, signupBtn, username } = req.body;
-    if (!!loginBtn) res.render('index', { username })
-    if (!!signupBtn) res.render('signup');
+    console.log(req.body);
+    if (!!loginBtn) return res.render('index', { username })
+    if (!!signupBtn) return res.render('signup');
+  }).get((req, res, next) => {
+    return res.render('login')
   });
-
   /****************************** 
     sign up 
   *******************************/
@@ -43,7 +45,7 @@ module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
         });
       }
     })
-  });
+  }).get((req, res, next) => res.render('signup'));
 
   /****************************** 
     raw material 
