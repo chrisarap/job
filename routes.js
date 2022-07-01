@@ -1,3 +1,6 @@
+const passport = require('passport');
+const session = require('express-session');
+
 module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
   /****************************** 
     index 
@@ -13,11 +16,11 @@ module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
   /****************************** 
     login
   *******************************/
-  app.route('/login').post((req, res) => {
-    const { loginBtn, signupBtn } = req.body;
-    if (!!loginBtn) {
-
-    }
+  app.route('/login').post(passport.authenticate('local', {
+    failureRedirect: '/login'
+  }), (req, res) => {
+    const { loginBtn, signupBtn, username } = req.body;
+    if (!!loginBtn) res.render('index', {username})
     if (!!signupBtn) res.render('signup');
   });
 

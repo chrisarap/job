@@ -4,8 +4,20 @@ const app = express();
 const mongoose = require('mongoose');
 const { formulaSchema, rawMaterialSchema, userSchema } = require('./squemas.js');
 const routes = require('./routes');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const auth = require('./auth');
+const session = require('express-session');
 
+//middleware
 app.use(express.urlencoded({ extended: false }));
+app.use(session({
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false,
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // mongodb and mongoose
 mongoose.connect(process.env.MONGO_URI);
@@ -18,5 +30,5 @@ app.set('view engine', 'pug');
 
 // call routes
 routes(app, formulaModel, rawMaterialModel, userModel);
-
+auth(userModel)
 app.listen(3000);
