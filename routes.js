@@ -8,9 +8,10 @@ module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
   app.route('/')
     .get((req, res) => res.render('login'))
     .post((req, res) => {
-      const { rawMaterialBtn, formulasBtn } = req.body;
+      const { rawMaterialBtn, formulasBtn, logoutBtn } = req.body;
       if (!!rawMaterialBtn) res.render('rawMaterial');
       if (!!formulasBtn) res.render('formulas');
+      if (!!logoutBtn) res.redirect('/logout');
     });
 
   /****************************** 
@@ -20,7 +21,7 @@ module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
     failureRedirect: '/login'
   }), (req, res) => {
     const { loginBtn, signupBtn, username } = req.body;
-    if (!!loginBtn) res.render('index', {username})
+    if (!!loginBtn) res.render('index', { username })
     if (!!signupBtn) res.render('signup');
   });
 
@@ -149,7 +150,6 @@ module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
             });
           });
       }
-
     });
 
   app.route('/show')
@@ -159,4 +159,14 @@ module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
         console.log(allFormulas);
       });
     });
+
+  /****************************** 
+  formulas 
+*******************************/
+  app.get('/logout', (req, res, next) => {
+    req.logout((err) => {
+      if (err) return next(err);
+      res.redirect('/');
+    });
+  });
 };
