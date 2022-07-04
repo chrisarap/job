@@ -1,23 +1,26 @@
 const mongoose = require('mongoose');
 
 const formulaSchema = new mongoose.Schema({
-  username: String,
-  formula: String,
   code: Number,
-  productLine: String
+  productLine: String,
+  name: String,
+  formula: String,
+  ingredients: {
+    code: Number,
+    amount: Number
+  }
 });
 
 const rawMaterialSchema = new mongoose.Schema({
   name: String,
-  date: Date,
-  active: Boolean,
-  unit: String,
   code: Number,
   cost: Number,
-  price: Number,
+  freightCode: Number,
+  unit: String,
   deparment: String,
-  utility: Number,
-  currency: String
+  date: Date,
+  active: Boolean,
+  freight: Boolean,
 });
 
 const userSchema = new mongoose.Schema({

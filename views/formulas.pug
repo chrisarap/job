@@ -1,11 +1,30 @@
 html
+  head
+    script(src='../dynamicInput.js')
   body
-    form(action='/createFormula' method='post')
+    form(action='/createFormula' method='post' id='test')
       h1 create new formula
-      input(type='text' name='formula' placeholder='formula')
       input(type='text' name='code' placeholder='code')
       input(type='text' name='productLine' placeholder='product line')
+    
+      input(type='text' name='formula' placeholder='formula')
+      
+      
       input(type='submit' value='save')
+
+  code: Number,
+  productLine: String,
+  name: String,
+  formula: String,
+  ingredients: {
+    code: Number,
+    amount: Number
+  }
+
+
+    button(onclick='myBtn()') asd
+      script
+        include ../dynamicInput.js
 
     form(action='/editFormula' method='post')
       h1 edit formula

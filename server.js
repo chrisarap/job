@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const { formulaSchema, rawMaterialSchema, userSchema } = require('./squemas.js');
 const routes = require('./routes');
 const passport = require('passport');
-const LocalStrategy = require('passport-local');
 const auth = require('./auth');
 const session = require('express-session');
 

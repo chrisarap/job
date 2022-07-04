@@ -5,36 +5,34 @@ html
 
   body
     form(action='/createRawMaterial' method='post')
-      h1 create raw material
+      h1 raw material    
 
       div#inputs
-        input(type='text' name='name' placeholder='name')
-        input(type='number' name='code' placeholder='code')
-        input(type='number' name='cost' placeholder='cost')
-        input(type='number' name='freightCode' placeholder='freight code')
-        input(type='number' name='freightCost' placeholder='freight cost')
+        input(type='text' name='name' placeholder='name' value=name)
+        input(type='number' name='code' placeholder='code' value=code)
+        input(type='number' name='cost' placeholder='cost' value=cost)
+        input(type='number' name='freightCode' placeholder='freight code' value=freightCode)
+        input(list='department' name='deparment' placeholder='deparment' value=deparment)
+        datalist#department
+          option(value='raw material') raw material
+          option(value='freight') freight
 
       div#createRawMaterial
+        label unit 
         label(for='kg') kg
-        input(id='kg' type='radio' name='unit' value='kg')
+        if unit == 'kg' 
+          input(id='kg' type='radio' name='unit' value='kg' checked)
+        else
+          input(id='kg' type='radio' name='unit' value='kg')
         label(for='t') t
-        input(id='t' type='radio' name='unit' value='t')
-      
-      input(type='submit' value='create' name='createBtn')   
+        if unit == 't'
+          input(id='t' type='radio' name='unit' value='t' checked)
+        else
+          input(id='t' type='radio' name='unit' value='t')
 
-    form(action='/createRawMaterial' method='post')
-      h1 edit raw material
-      label() name
-      input(type='text' name='name' placeholder='name' value=name) 
-      label() code
-      input(type='number' name='code' placeholder='code' value=code)
-      label() cost
-      input(type='number' name='cost' placeholder='cost' value=cost)
-      label() freight code
-      input(type='number' name='freightCode' placeholder='freight code' value=freightCode )
-      label() freight cost
-      input(type='number' name='freightCost' placeholder='freight' value=freightCost)
-      h2=date
+        p created on #{date}
       div#createRawMaterial      
+        input(type='submit' value='create' name='createBtn')   
         input(type='submit' value='search' name ='searchBtn')
         input(type='submit' value='save' name ='saveBtn')
+        a(href='index') back

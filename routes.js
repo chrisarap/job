@@ -1,5 +1,6 @@
 const passport = require('passport');
 const session = require('express-session');
+const bcrypt = require('bcrypt');
 
 module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
   /****************************** 
@@ -21,7 +22,6 @@ module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
     failureRedirect: '/'
   }), (req, res) => {
     const { loginBtn, signupBtn, username } = req.body;
-    console.log(req.body);
     if (!!loginBtn) return res.render('index', { username })
     if (!!signupBtn) return res.render('signup');
   }).get((req, res, next) => {
@@ -30,41 +30,42 @@ module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
   /****************************** 
     sign up 
   *******************************/
-
-  app.route('/signup').post((req, res) => {
-    const { username, password, password2 } = req.body;
-
-    userModel.findOne({ username: username }, (err, foundUser) => {
-      if (err) return console.error(err);
-      if (foundUser) res.render('signup', { message: 'the username exist!' });
-      if (password !== password2) res.render('signup', { message: 'passwords are different' });
-      if (!foundUser && password === password2) {
-        userModel.create({ username, password }, (err, userCreated) => {
-          if (err) return console.err(err);
-          res.render('login');
-        });
-      }
-    })
-  }).get((req, res, next) => res.render('signup'));
-
+  /*
+    app.route('/signup').post((req, res) => {
+      const { username, password, password2 } = req.body;
+      const hash = bcrypt.hashSync(password, 12);
+  
+      userModel.findOne({ username: username }, (err, foundUser) => {
+  
+  
+        if (err) return console.error(err);
+        if (foundUser) res.render('signup', { message: 'the username exist!' });
+        if (password !== password2) res.render('signup', { message: 'passwords are different' });
+        if (!foundUser && password === password2) {
+          userModel.create({ username, password: hash }, (err, userCreated) => {
+            if (err) return console.err(err);
+            res.render('login');
+          });
+        }
+      })
+    }).get((req, res, next) => res.render('signup'));
+  */
   /****************************** 
     raw material 
   *******************************/
   app.route('/createRawMaterial')
     .post((req, res) => {
-      const { name, code, cost, freightCode, freightCost, unit, createBtn, searchBtn, saveBtn } = req.body;
-
+      const { name, code, cost, freightCode, deparment, unit, createBtn, searchBtn, saveBtn } = req.body;
       let date = new Date();
-      console.log(date);
 
       if (!!createBtn) {
         rawMaterialModel.create(
-          Object.assign({ name, date }, { data: { code, cost, freightCode, freightCost, unit } }),
+          Object.assign({}, { name, code, cost, freightCode, deparment, unit, date }),
           (err, newRawMaterial) => {
             if (err) return console.error(err);
-            //console.log('new raw material added', newRawMaterial[0].name);
-            res.render('rawMaterial', { name: 'test2' });
+            res.render('rawMaterial');
           });
+
       } else if (!!searchBtn) {
         rawMaterialModel.find(
           { name },
@@ -74,11 +75,12 @@ module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
 
             res.render('rawMaterial', {
               name: updatedRawMaterial[0].name,
-              code: updatedRawMaterial[0].data.code,
-              cost: updatedRawMaterial[0].data.cost,
-              freightCode: updatedRawMaterial[0].data.freightCode,
-              freightCost: updatedRawMaterial[0].data.freightCost,
-              date: updatedRawMaterial[0].date.toUTCString(),
+              code: updatedRawMaterial[0].code,
+              cost: updatedRawMaterial[0].cost,
+              freightCode: updatedRawMaterial[0].freightCode,
+              unit: updatedRawMaterial[0].unit,
+              deparment: updatedRawMaterial[0].deparment,
+              date: updatedRawMaterial[0].date.toUTCString()
             });
           }
         );
@@ -86,7 +88,7 @@ module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
         console.log('save', req.body);
         rawMaterialModel.findOneAndUpdate(
           { name },
-          { data: { cost, freightCost, code, freightCode } },
+          { name, code, cost, freightCode, unit, deparment, date },
           { new: true, overwrite: false },
           (err, updatedRawMaterial) => {
             console.log(updatedRawMaterial);
@@ -96,6 +98,11 @@ module.exports = (app, formulaModel, rawMaterialModel, userModel) => {
       }
     });
 
+ 
+  app.route('/index').get((req, res) => {
+    res.render('index');
+  });
+  
   /****************************** 
     formulas 
   *******************************/
